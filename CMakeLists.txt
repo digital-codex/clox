@@ -3,15 +3,16 @@ project(clox C)
 
 set(CMAKE_C_STANDARD 17)
 
-set(SOURCES src/chunk.c src/memory.c
-        src/debug.c
-        src/value.c)
+set(SOURCES src/chunk.c src/memory.c src/debug.c src/value.c src/vm.c)
 set(
         INCLUDES
         include/clox/common.h include/clox/chunk.h include/clox/memory.h
         include/clox/debug.h
         include/clox/value.h
+        include/clox/vm.h
 )
+
+add_compile_definitions(HAS_DEBUG)
 
 add_executable(clox src/main.c ${SOURCES} ${INCLUDES})
 target_include_directories(
