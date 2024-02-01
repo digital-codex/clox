@@ -29,7 +29,10 @@ typedef enum {
 
 void initVM();
 void freeVM();
+/* Spinning Up the Interpreter 16.1
 InterpretResult interpret(Chunk *chunk);
+*/
+InterpretResult interpret(const char *source);
 void push(Value value);
 Value pop();
 

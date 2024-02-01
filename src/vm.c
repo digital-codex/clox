@@ -4,8 +4,13 @@
 #include <stdio.h>
 
 #include "common.h"
+#include "compiler.h"
 #include "debug.h"
 #include "vm.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 VM vm;
 
@@ -91,8 +96,18 @@ static InterpretResult run() {
 #undef READ_BYTE
 }
 
+/* Spinning Up the Interpreter 16.1
 InterpretResult interpret(Chunk *chunk) {
     vm.chunk = chunk;
     vm.ip = vm.chunk->code;
     return run();
 }
+*/
+InterpretResult interpret(const char *source) {
+    compile(source);
+    return INTERPRET_OK;
+}
+
+#ifdef __cplusplus
+}
+#endif
