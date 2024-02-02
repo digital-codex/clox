@@ -9,7 +9,12 @@
 extern "C" {
 #endif
 
+#include "vm.h"
+
+/* Single-Pass Compilation 17.1
 void compile(const char *source);
+*/
+bool compile(const char *source, Chunk *chunk);
 
 #ifdef __cplusplus
 }

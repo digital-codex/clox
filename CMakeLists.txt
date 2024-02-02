@@ -15,7 +15,7 @@ set(
         include/clox/compiler.h include/clox/scanner.h
 )
 
-add_compile_definitions(HAS_DEBUG)
+add_compile_definitions(PRINT)
 
 add_executable(clox src/main.c ${SOURCES} ${INCLUDES})
 target_include_directories(

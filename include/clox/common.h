@@ -9,7 +9,16 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#ifdef HAS_DEBUG
+#ifdef PRINT
+    #define DEBUG_PRINT_CODE
+#endif
+
+#ifdef TRACE
+    #define DEBUG_TRACE_EXECUTION
+#endif
+
+#ifdef DEBUG
+    #define DEBUG_PRINT_CODE
     #define DEBUG_TRACE_EXECUTION
 #endif
 
