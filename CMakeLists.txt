@@ -7,15 +7,17 @@ set(
         SOURCES
         src/chunk.c src/memory.c src/debug.c src/value.c src/vm.c
         src/compiler.c src/scanner.c
+        src/object.c
 )
 set(
         INCLUDES
         include/clox/common.h include/clox/chunk.h include/clox/memory.h
         include/clox/debug.h include/clox/value.h include/clox/vm.h
         include/clox/compiler.h include/clox/scanner.h
+        include/clox/object.h
 )
 
-add_compile_definitions(PRINT)
+add_compile_definitions(DEBUG)
 
 add_executable(clox src/main.c ${SOURCES} ${INCLUDES})
 target_include_directories(

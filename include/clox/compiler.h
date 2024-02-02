@@ -9,6 +9,7 @@
 extern "C" {
 #endif
 
+#include "object.h"
 #include "vm.h"
 
 /* Single-Pass Compilation 17.1
