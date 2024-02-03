@@ -12,10 +12,7 @@ extern "C" {
 #include "object.h"
 #include "vm.h"
 
-/* Single-Pass Compilation 17.1
-void compile(const char *source);
-*/
-bool compile(const char *source, Chunk *chunk);
+ObjFunction *compile(const char *source);
 
 #ifdef __cplusplus
 }

@@ -9,16 +9,11 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#ifdef PRINT
+#if defined(PRINT) || defined(DEBUG)
     #define DEBUG_PRINT_CODE
 #endif
 
-#ifdef TRACE
-    #define DEBUG_TRACE_EXECUTION
-#endif
-
-#ifdef DEBUG
-    #define DEBUG_PRINT_CODE
+#if defined(TRACE) || defined(DEBUG)
     #define DEBUG_TRACE_EXECUTION
 #endif
 

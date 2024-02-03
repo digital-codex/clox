@@ -36,6 +36,7 @@ typedef enum {
     OP_JUMP,
     OP_JUMP_IF_FALSE,
     OP_LOOP,
+    OP_CALL,
     OP_RETURN,
 } OpCode;
 
@@ -49,9 +50,6 @@ typedef struct {
 
 void initChunk(Chunk *chunk);
 void freeChunk(Chunk *chunk);
-/* 14.6 Line Information
-void writeChunk(Chunk *chunk, uint8_t byte);
-*/
 void writeChunk(Chunk *chunk, uint8_t byte, int line);
 int addConstant(Chunk *chunk, Value value);
 
