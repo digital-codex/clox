@@ -1,7 +1,6 @@
 //
 // Created by treyvon on 1/31/24.
 //
-
 #include <stdlib.h>
 
 #include "chunk.h"
@@ -12,7 +11,7 @@
 extern "C" {
 #endif
 
-void initChunk(Chunk *chunk) {
+void initChunk(Chunk* chunk) {
     chunk->count = 0;
     chunk->capacity = 0;
     chunk->code = NULL;
@@ -20,14 +19,14 @@ void initChunk(Chunk *chunk) {
     initValueArray(&chunk->constants);
 }
 
-void freeChunk(Chunk *chunk) {
+void freeChunk(Chunk* chunk) {
     FREE_ARRAY(uint8_t, chunk->code, chunk->capacity);
     FREE_ARRAY(uint8_t, chunk->lines, chunk->capacity);
     freeValueArray(&chunk->constants);
     initChunk(chunk);
 }
 
-void writeChunk(Chunk *chunk, uint8_t byte, int line) {
+void writeChunk(Chunk* chunk, uint8_t byte, int line) {
     if (chunk->capacity < chunk->count + 1) {
         int oldCapacity = chunk->capacity;
         chunk->capacity = GROW_CAPACITY(oldCapacity);
@@ -42,7 +41,7 @@ void writeChunk(Chunk *chunk, uint8_t byte, int line) {
     chunk->count++;
 }
 
-int addConstant(Chunk *chunk, Value value) {
+int addConstant(Chunk* chunk, Value value) {
     push(value);
     writeValueArray(&chunk->constants, value);
     pop();

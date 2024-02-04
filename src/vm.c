@@ -19,11 +19,11 @@ extern "C" {
 
 VM vm;
 
-static Value clockNative(int argCount, Value *args) {
+static Value clockNative(int argCount, Value* args) {
     return NUMBER_VAL((double) clock() / CLOCKS_PER_SEC);
 }
 
-static Value stringNative(int argCount, Value *args) {
+static Value stringNative(int argCount, Value* args) {
     char num[64];
     sprintf(num, "%f", AS_NUMBER(args[0]));
     return OBJ_VAL(copyString(num, strlen(num)));
@@ -35,7 +35,7 @@ static void resetStack() {
     vm.openUpvalues = NULL;
 }
 
-static void runtimeError(const char *format, ...) {
+static void runtimeError(const char* format, ...) {
     va_list args;
     va_start(args, format);
     vfprintf(stderr, format, args);
@@ -43,8 +43,8 @@ static void runtimeError(const char *format, ...) {
     fputs("\n", stderr);
 
     for (int i = vm.frameCount - 1; i >= 0; i--) {
-        CallFrame *frame = &vm.frames[i];
-        ObjFunction *function = frame->closure->function;
+        CallFrame* frame = &vm.frames[i];
+        ObjFunction* function = frame->closure->function;
         size_t instruction = frame->ip - function->chunk.code - 1;
         fprintf(stderr, "[line %d] in ", function->chunk.lines[instruction]);
         if (function->name == NULL) {
@@ -102,7 +102,7 @@ static Value peek(int distance) {
     return vm.stackTop[-1 - distance];
 }
 
-static bool call(ObjClosure *closure, int argCount) {
+static bool call(ObjClosure* closure, int argCount) {
     if (argCount != closure->function->arity) {
         runtimeError("Expected %d arguments but got %d.", closure->function->arity, argCount);
         return false;
@@ -113,7 +113,7 @@ static bool call(ObjClosure *closure, int argCount) {
         return false;
     }
 
-    CallFrame *frame = &vm.frames[vm.frameCount++];
+    CallFrame* frame = &vm.frames[vm.frameCount++];
     frame->closure = closure;
     frame->ip = closure->function->chunk.code;
     frame->slots = vm.stackTop - argCount - 1;
@@ -141,9 +141,9 @@ static bool callValue(Value callee, int argCount) {
     return false;
 }
 
-static ObjUpvalue *captureUpvalue(Value *local) {
-    ObjUpvalue *prevUpvalue = NULL;
-    ObjUpvalue *upvalue = vm.openUpvalues;
+static ObjUpvalue* captureUpvalue(Value* local) {
+    ObjUpvalue* prevUpvalue = NULL;
+    ObjUpvalue* upvalue = vm.openUpvalues;
     while (upvalue != NULL && upvalue->location > local) {
         prevUpvalue = upvalue;
         upvalue = upvalue->next;
@@ -153,7 +153,7 @@ static ObjUpvalue *captureUpvalue(Value *local) {
         return upvalue;
     }
 
-    ObjUpvalue *createdUpvalue = newUpvalue(local);
+    ObjUpvalue* createdUpvalue = newUpvalue(local);
     createdUpvalue->next = upvalue;
 
     if (prevUpvalue == NULL) {
@@ -165,9 +165,9 @@ static ObjUpvalue *captureUpvalue(Value *local) {
     return createdUpvalue;
 }
 
-static void closeUpvalues(Value *last) {
+static void closeUpvalues(Value* last) {
     while (vm.openUpvalues != NULL && vm.openUpvalues->location >= last) {
-        ObjUpvalue *upvalue = vm.openUpvalues;
+        ObjUpvalue* upvalue = vm.openUpvalues;
         upvalue->closed = *upvalue->location;
         upvalue->location = &upvalue->closed;
         vm.openUpvalues = upvalue->next;
@@ -179,23 +179,23 @@ static bool isFalsey(Value value) {
 }
 
 static void concatenate() {
-    ObjString *b = AS_STRING(peek(0));
-    ObjString *a = AS_STRING(peek(1));
+    ObjString* b = AS_STRING(peek(0));
+    ObjString* a = AS_STRING(peek(1));
 
     int length = a->length + b->length;
-    char *chars = ALLOCATE(char, length + 1);
+    char* chars = ALLOCATE(char, length + 1);
     memcpy(chars, a->chars, a->length);
     memcpy(chars + a->length, b->chars, b->length);
     chars[length] = '\0';
 
-    ObjString *result = takeString(chars, length);
+    ObjString* result = takeString(chars, length);
     pop();
     pop();
     push(OBJ_VAL(result));
 }
 
 static InterpretResult run() {
-    CallFrame *frame = &vm.frames[vm.frameCount - 1];
+    CallFrame* frame = &vm.frames[vm.frameCount - 1];
 
 #define READ_BYTE() (*frame->ip++)
 #define READ_SHORT() (frame->ip += 2, (uint16_t) ((frame->ip[-2] << 8) | frame->ip[-1]))
@@ -215,7 +215,7 @@ static InterpretResult run() {
     for (;;) {
 #ifdef DEBUG_TRACE_EXECUTION
         printf("\t\t\t");
-        for (Value *slot = vm.stack; slot < vm.stackTop; slot++) {
+        for (Value* slot = vm.stack; slot < vm.stackTop; slot++) {
             printf("[ ");
             printValue(*slot);
             printf(" ]");
@@ -252,7 +252,7 @@ static InterpretResult run() {
                 break;
             }
             case OP_GET_GLOBAL: {
-                ObjString *name = READ_STRING();
+                ObjString* name = READ_STRING();
                 Value value;
                 if (!tableGet(&vm.globals, name, &value)) {
                     runtimeError("Undefined variable '%s'", name->chars);
@@ -267,7 +267,7 @@ static InterpretResult run() {
                 break;
             }
             case OP_DEFINE_GLOBAL: {
-                ObjString *name = READ_STRING();
+                ObjString* name = READ_STRING();
                 tableSet(&vm.globals, name, peek(0));
                 pop();
                 break;
@@ -278,7 +278,7 @@ static InterpretResult run() {
                 break;
             }
             case OP_SET_GLOBAL: {
-                ObjString *name = READ_STRING();
+                ObjString* name = READ_STRING();
                 if (tableSet(&vm.globals, name, peek(0))) {
                     tableDelete(&vm.globals, name);
                     runtimeError("Undefined variable '%s'.", name->chars);
@@ -373,8 +373,8 @@ static InterpretResult run() {
                 break;
             }
             case OP_CLOSURE: {
-                ObjFunction *function = AS_FUNCTION(READ_CONSTANT());
-                ObjClosure *closure = newClosure(function);
+                ObjFunction* function = AS_FUNCTION(READ_CONSTANT());
+                ObjClosure* closure = newClosure(function);
                 push(OBJ_VAL(closure));
                 for (int i = 0; i < closure->upvalueCount; i++) {
                     uint8_t isLocal = READ_BYTE();
@@ -416,12 +416,12 @@ static InterpretResult run() {
 #undef READ_BYTE
 }
 
-InterpretResult interpret(const char *source) {
-    ObjFunction *function = compile(source);
+InterpretResult interpret(const char* source) {
+    ObjFunction* function = compile(source);
     if (function == NULL) return INTERPRET_COMPILE_ERROR;
 
     push(OBJ_VAL(function));
-    ObjClosure *closure = newClosure(function);
+    ObjClosure* closure = newClosure(function);
     pop();
     push(OBJ_VAL(closure));
     call(closure, 0);

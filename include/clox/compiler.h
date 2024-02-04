@@ -5,14 +5,14 @@
 #ifndef CLOX_COMPILER_H
 #define CLOX_COMPILER_H
 
+#include "object.h"
+#include "vm.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "object.h"
-#include "vm.h"
-
-ObjFunction *compile(const char *source);
+ObjFunction* compile(const char* source);
 void markCompilerRoots();
 
 #ifdef __cplusplus

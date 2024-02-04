@@ -11,7 +11,7 @@
 extern "C" {
 #endif
 
-void disassembleChunk(Chunk *chunk, const char *name) {
+void disassembleChunk(Chunk* chunk, const char* name) {
     printf("== %s ==\n", name);
 
     for (int offset = 0; offset < chunk->count;) {
@@ -19,7 +19,7 @@ void disassembleChunk(Chunk *chunk, const char *name) {
     }
 }
 
-static int constantInstruction(const char *name, Chunk *chunk, int offset) {
+static int constantInstruction(const char* name, Chunk* chunk, int offset) {
     uint8_t constant = chunk->code[offset + 1];
     printf("%-16s %4d '", name, constant);
     printValue(chunk->constants.values[constant]);
@@ -27,25 +27,25 @@ static int constantInstruction(const char *name, Chunk *chunk, int offset) {
     return offset + 2;
 }
 
-static int simpleInstruction(const char *name, int offset) {
+static int simpleInstruction(const char* name, int offset) {
     printf("%s\n", name);
     return offset + 1;
 }
 
-static int byteInstruction(const char *name, Chunk *chunk, int offset) {
+static int byteInstruction(const char* name, Chunk* chunk, int offset) {
     uint8_t slot = chunk->code[offset + 1];
     printf("%-16s %4d\n", name, slot);
     return offset + 2;
 }
 
-static int jumpInstruction(const char *name, int sign, Chunk *chunk, int offset) {
+static int jumpInstruction(const char* name, int sign, Chunk* chunk, int offset) {
     uint16_t jump = (uint16_t) (chunk->code[offset + 1] << 8);
     jump |= chunk->code[offset + 2];
     printf("%-16s %4d -> %d\n", name, offset, offset + 3 + sign * jump);
     return offset + 3;
 }
 
-int disassembleInstruction(Chunk *chunk, int offset) {
+int disassembleInstruction(Chunk* chunk, int offset) {
     printf("%04d ", offset);
     if (offset > 0 && chunk->lines[offset] == chunk->lines[offset - 1]) {
         printf("\t| ");
@@ -114,7 +114,7 @@ int disassembleInstruction(Chunk *chunk, int offset) {
             printValue(chunk->constants.values[constant]);
             printf("\n");
 
-            ObjFunction *function = AS_FUNCTION(chunk->constants.values[constant]);
+            ObjFunction* function = AS_FUNCTION(chunk->constants.values[constant]);
             for (int j = 0; j < function->upvalueCount; j++) {
                 int isLocal = chunk->code[offset++];
                 int index = chunk->code[offset++];
