@@ -13,6 +13,7 @@ extern "C" {
 #include "vm.h"
 
 ObjFunction *compile(const char *source);
+void markCompilerRoots();
 
 #ifdef __cplusplus
 }

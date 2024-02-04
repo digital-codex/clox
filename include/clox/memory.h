@@ -26,6 +26,9 @@ extern "C" {
 #endif
 
 void *reallocate(void *pointer, size_t oldSize, size_t newSize);
+void markObject(Obj *object);
+void markValue(Value value);
+void collectGarbage();
 void freeObjects();
 
 #ifdef __cpluscplus
