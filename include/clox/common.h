@@ -9,6 +9,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#define NAN_BOXING
+
 #if defined(PRINT) || defined(DEBUG)
     #define DEBUG_PRINT_CODE
 #endif

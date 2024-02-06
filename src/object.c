@@ -33,7 +33,7 @@ static Obj *allocateObject(size_t size, ObjType type) {
 }
 
 ObjBoundMethod* newBoundMethod(Value receiver, ObjClosure* method) {
-    ObjBoundMethod* bound = ALLOCATE_OBJ(ObjBoundMethod, OBJ_BOUND_METHOD);
+    ObjBoundMethod* bound = ALLOCATE_OBJ(ObjBoundMethod, OBJ_BOUND_METHOD)
 
     bound->receiver = receiver;
     bound->method = method;

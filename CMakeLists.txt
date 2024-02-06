@@ -16,8 +16,6 @@ set(
         include/clox/table.h
 )
 
-add_compile_definitions(TRACE PRINT)
-
 add_executable(clox src/main.c ${SOURCES} ${INCLUDES})
 target_include_directories(
         clox PRIVATE
